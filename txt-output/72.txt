@@ -1,0 +1,52 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.            
+f g x y = (g (if x then x else y), g "abc")
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\72.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\72.hs:6:35:
+    Couldn't match expected type `[Char]' against inferred type `Bool'
+      Expected type: [Char] -> t
+      Inferred type: Bool -> t1
+    In the expression: g "abc"
+    In the expression: (g (if x then x else y), g "abc")
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\72.hs, ill-typed\72.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\72.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\72.hs:6:38: error:
+    * Couldn't match type `[Char]' with `Bool'
+      Expected: Bool
+        Actual: String
+    * In the first argument of `g', namely `"abc"'
+      In the expression: g "abc"
+      In the expression: (g (if x then x else y), g "abc")
+  |
+6 | f g x y = (g (if x then x else y), g "abc")
+  |                                      ^^^^^

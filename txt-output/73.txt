@@ -1,0 +1,58 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: pop requires a pair while push returns a list
+idStack stk = pop (push undefined stk)                              
+push top stk = (top:stk)
+pop (top,stk) = stk
+empty = []
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\73.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\73.hs:6:19:
+    Couldn't match expected type `(t, t1)' against inferred type `[a]'
+    In the first argument of `pop', namely `(push undefined stk)'
+    In the expression: pop (push undefined stk)
+    In the definition of `idStack':
+        idStack stk = pop (push undefined stk)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\73.hs, ill-typed\73.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\73.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\73.hs:6:20: error:
+    * Couldn't match expected type: (a0, b)
+                  with actual type: [a]
+    * In the first argument of `pop', namely `(push undefined stk)'
+      In the expression: pop (push undefined stk)
+      In an equation for `idStack':
+          idStack stk = pop (push undefined stk)
+    * Relevant bindings include
+        stk :: [a] (bound at ill-typed\73.hs:6:9)
+        idStack :: [a] -> b (bound at ill-typed\73.hs:6:1)
+  |
+6 | idStack stk = pop (push undefined stk)                              
+  |                    ^^^^^^^^^^^^^^^^^^

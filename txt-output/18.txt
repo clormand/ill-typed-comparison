@@ -1,0 +1,57 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.
+test = \f i -> (f i, f 2, [f,i])                
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\18.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\18.hs:6:29:
+    Occurs check: cannot construct the infinite type: t = t -> t1
+    Probable cause: `i' is applied to too many arguments
+    In the expression: i
+    In the expression: [f, i]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\18.hs, ill-typed\18.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\18.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\18.hs:6:30: error:
+    * Couldn't match expected type `t -> b' with actual type `t'
+      `t' is a rigid type variable bound by
+        the inferred type of test :: (t -> b) -> t -> (b, b, [t -> b])
+        at ill-typed\18.hs:6:1-32
+    * In the expression: i
+      In the expression: [f, i]
+      In the expression: (f i, f 2, [f, i])
+    * Relevant bindings include
+        i :: t (bound at ill-typed\18.hs:6:11)
+        f :: t -> b (bound at ill-typed\18.hs:6:9)
+        test :: (t -> b) -> t -> (b, b, [t -> b])
+          (bound at ill-typed\18.hs:6:1)
+  |
+6 | test = \f i -> (f i, f 2, [f,i])                
+  |                              ^

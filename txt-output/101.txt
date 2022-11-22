@@ -1,0 +1,76 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: 3 should be of type Int -> a
+v64 = let f = \x -> let y = x                                 
+              in y 5
+      in f 3
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\101.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\101.hs:8:11:
+    No instance for (Num (t -> t1))
+      arising from the literal `3' at ill-typed\101.hs:8:11
+    Possible fix: add an instance declaration for (Num (t -> t1))
+    In the first argument of `f', namely `3'
+    In the expression: f 3
+    In the expression: let f = \ x -> ... in f 3
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\101.hs, ill-typed\101.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\101.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\101.hs:7:20: error:
+    * Ambiguous type variable `t1' arising from the literal `5'
+      prevents the constraint `(Num t1)' from being solved.
+      Relevant bindings include
+        y :: t1 -> t (bound at ill-typed\101.hs:6:25)
+        x :: t1 -> t (bound at ill-typed\101.hs:6:16)
+        f :: (t1 -> t) -> t (bound at ill-typed\101.hs:6:11)
+      Probable fix: use a type annotation to specify what `t1' should be.
+      These potential instances exist:
+        instance Num Integer -- Defined in `GHC.Num'
+        instance Num Double -- Defined in `GHC.Float'
+        instance Num Float -- Defined in `GHC.Float'
+        ...plus two others
+        ...plus one instance involving out-of-scope types
+        (use -fprint-potential-instances to see them all)
+    * In the first argument of `y', namely `5'
+      In the expression: y 5
+      In the expression: let y = x in y 5
+  |
+7 |               in y 5
+  |                    ^
+
+ill-typed\101.hs:8:12: error:
+    * No instance for (Num (t1 -> t0)) arising from the literal `3'
+        (maybe you haven't applied a function to enough arguments?)
+    * In the first argument of `f', namely `3'
+      In the expression: f 3
+      In the expression: let f = \ x -> ... in f 3
+  |
+8 |       in f 3
+  |            ^

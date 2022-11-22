@@ -1,0 +1,52 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.            
+v14 = (\x -> x + (x 4)) (if True then True else 1)    
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\24.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\24.hs:6:18:
+    Occurs check: cannot construct the infinite type: a = t -> a
+    Probable cause: `x' is applied to too many arguments
+    In the second argument of `(+)', namely `(x 4)'
+    In the expression: x + (x 4)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\24.hs, ill-typed\24.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\24.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\24.hs:6:39: error:
+    * Couldn't match expected type `t -> t1' with actual type `Bool'
+    * In the expression: True
+      In the first argument of `\ x -> x + (x 4)', namely
+        `(if True then True else 1)'
+      In the expression: (\ x -> x + (x 4)) (if True then True else 1)
+    * Relevant bindings include
+        v14 :: t -> t1 (bound at ill-typed\24.hs:6:1)
+  |
+6 | v14 = (\x -> x + (x 4)) (if True then True else 1)    
+  |                                       ^^^^

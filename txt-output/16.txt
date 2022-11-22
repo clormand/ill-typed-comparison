@@ -1,0 +1,69 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: should be sin 0.2
+test = sin .2                                                              
+            
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\16.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\16.hs:6:12:
+    No instance for (Num (a -> b))
+      arising from the literal `2' at ill-typed\16.hs:6:12
+    Possible fix: add an instance declaration for (Num (a -> b))
+    In the second argument of `(.)', namely `2'
+    In the expression: sin . 2
+    In the definition of `test': test = sin . 2
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\16.hs, ill-typed\16.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\16.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\16.hs:6:8: error:
+    * Ambiguous type variable `c0' arising from a use of `sin'
+      prevents the constraint `(Floating c0)' from being solved.
+      Relevant bindings include
+        test :: a0 -> c0 (bound at ill-typed\16.hs:6:1)
+      Probable fix: use a type annotation to specify what `c0' should be.
+      These potential instances exist:
+        instance Floating Double -- Defined in `GHC.Float'
+        instance Floating Float -- Defined in `GHC.Float'
+    * In the first argument of `(.)', namely `sin'
+      In the expression: sin . 2
+      In an equation for `test': test = sin . 2
+  |
+6 | test = sin .2                                                              
+  |        ^^^
+
+ill-typed\16.hs:6:13: error:
+    * No instance for (Num (a0 -> c0)) arising from the literal `2'
+        (maybe you haven't applied a function to enough arguments?)
+    * In the second argument of `(.)', namely `2'
+      In the expression: sin . 2
+      In an equation for `test': test = sin . 2
+  |
+6 | test = sin .2                                                              
+  |             ^

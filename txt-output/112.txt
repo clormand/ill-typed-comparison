@@ -1,0 +1,60 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+v69 = \x -> if x then x +1 else x - 2.2                       
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\112.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\112.hs:6:36:
+    No instance for (Fractional Bool)
+      arising from the literal `2.2' at ill-typed\112.hs:6:36-38
+    Possible fix: add an instance declaration for (Fractional Bool)
+    In the second argument of `(-)', namely `2.2'
+    In the expression: x - 2.2
+    In the expression: if x then x + 1 else x - 2.2
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\112.hs, ill-typed\112.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\112.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\112.hs:6:25: error:
+    * No instance for (Num Bool) arising from a use of `+'
+    * In the expression: x + 1
+      In the expression: if x then x + 1 else x - 2.2
+      In the expression: \ x -> if x then x + 1 else x - 2.2
+  |
+6 | v69 = \x -> if x then x +1 else x - 2.2                       
+  |                         ^
+
+ill-typed\112.hs:6:37: error:
+    * No instance for (Fractional Bool) arising from the literal `2.2'
+    * In the second argument of `(-)', namely `2.2'
+      In the expression: x - 2.2
+      In the expression: if x then x + 1 else x - 2.2
+  |
+6 | v69 = \x -> if x then x +1 else x - 2.2                       
+  |                                     ^^^

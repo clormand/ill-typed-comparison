@@ -1,0 +1,62 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [z] should be z
+fold f z [] = [z]                             
+fold f z (x:xs) = fold f (f z x) xs
+flip1 f x y = f y x
+reverse2 = fold (flip1 (:)) []
+palin xs = reverse2 xs == xs
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\37.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\37.hs:10:26:
+    Occurs check: cannot construct the infinite type: t = [t]
+      Expected type: [[t]]
+      Inferred type: [t]
+    In the second argument of `(==)', namely `xs'
+    In the expression: reverse2 xs == xs
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\37.hs, ill-typed\37.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\37.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\37.hs:10:27: error:
+    * Couldn't match type `t' with `[t]'
+      Expected: [[t]]
+        Actual: [t]
+      `t' is a rigid type variable bound by
+        the inferred type of palin :: [t] -> Bool
+        at ill-typed\37.hs:10:1-28
+    * In the second argument of `(==)', namely `xs'
+      In the expression: reverse2 xs == xs
+      In an equation for `palin': palin xs = reverse2 xs == xs
+    * Relevant bindings include
+        xs :: [t] (bound at ill-typed\37.hs:10:7)
+        palin :: [t] -> Bool (bound at ill-typed\37.hs:10:1)
+   |
+10 | palin xs = reverse2 xs == xs
+   |                           ^^

@@ -1,0 +1,55 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+m f [] = []                                             
+m f (x:xs) = f xs : m f x
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\115.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\115.hs:7:20:
+    Occurs check: cannot construct the infinite type: t = [t]
+      Expected type: ([t] -> a) -> t -> [a]
+      Inferred type: ([t] -> a) -> [t] -> [a1]
+    In the second argument of `(:)', namely `m f x'
+    In the expression: f xs : m f x
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\115.hs, ill-typed\115.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\115.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\115.hs:6:1: error:
+    * Couldn't match type `t' with `[t]'
+      Expected: ([t] -> a) -> t -> [a]
+        Actual: ([t] -> a) -> [t] -> [a]
+      `t' is a rigid type variable bound by
+        the inferred type of m :: ([t] -> a) -> t -> [a]
+        at ill-typed\115.hs:(6,1)-(7,25)
+    * Relevant bindings include
+        m :: ([t] -> a) -> t -> [a] (bound at ill-typed\115.hs:6:1)
+  |
+6 | m f [] = []                                             
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...

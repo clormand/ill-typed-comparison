@@ -1,0 +1,51 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: "b" should be b
+test b = if "b" then "yes!" else "no!"            
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\46.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\46.hs:6:12:
+    Couldn't match expected type `Bool' against inferred type `[Char]'
+    In the expression: "b"
+    In the expression: if "b" then "yes!" else "no!"
+    In the definition of `test': test b = if "b" then "yes!" else "no!"
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\46.hs, ill-typed\46.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\46.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\46.hs:6:13: error:
+    * Couldn't match type `[Char]' with `Bool'
+      Expected: Bool
+        Actual: String
+    * In the expression: "b"
+      In the expression: if "b" then "yes!" else "no!"
+      In an equation for `test': test b = if "b" then "yes!" else "no!"
+  |
+6 | test b = if "b" then "yes!" else "no!"            
+  |             ^^^

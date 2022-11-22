@@ -1,0 +1,61 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: last u should be of type a where a is the argument type of x 
+v66 = \x -> let f = \y -> y x                                 
+            in f (\z -> z) (f (\u -> u))
+      
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\103.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\103.hs:7:15:
+    Occurs check: cannot construct the infinite type: t = t -> t1
+    Probable cause: `f' is applied to too many arguments
+    In the expression: f (\ z -> z) (f (\ u -> u))
+    In the expression:
+        let f = \ y -> ... in f (\ z -> z) (f (\ u -> u))
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\103.hs, ill-typed\103.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\103.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\103.hs:7:38: error:
+    * Couldn't match expected type `t' with actual type `t -> t1'
+      `t' is a rigid type variable bound by
+        the inferred type of v66 :: (t -> t1) -> t1
+        at ill-typed\103.hs:(6,1)-(7,40)
+    * In the expression: u
+      In the first argument of `f', namely `(\ u -> u)'
+      In the second argument of `f', namely `(f (\ u -> u))'
+    * Relevant bindings include
+        u :: t -> t1 (bound at ill-typed\103.hs:7:33)
+        f :: forall {t2}. ((t -> t1) -> t2) -> t2
+          (bound at ill-typed\103.hs:6:17)
+        x :: t -> t1 (bound at ill-typed\103.hs:6:8)
+        v66 :: (t -> t1) -> t1 (bound at ill-typed\103.hs:6:1)
+  |
+7 |             in f (\z -> z) (f (\u -> u))
+  |                                      ^

@@ -1,0 +1,55 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+v691 = \x -> (x + 1 ) (if x then x + 1 else x - 2.2)           
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\113.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\113.hs:6:26:
+    Couldn't match expected type `Bool' against inferred type `t -> t1'
+    In the expression: x
+    In the first argument of `(x + 1)', namely
+        `(if x then x + 1 else x - 2.2)'
+    In the expression: (x + 1) (if x then x + 1 else x - 2.2)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\113.hs, ill-typed\113.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\113.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\113.hs:6:27: error:
+    * Couldn't match expected type `Bool' with actual type `t -> t1'
+    * Probable cause: `x' is applied to too few arguments
+      In the expression: x
+      In the first argument of `x + 1', namely
+        `(if x then x + 1 else x - 2.2)'
+      In the expression: (x + 1) (if x then x + 1 else x - 2.2)
+    * Relevant bindings include
+        x :: t -> t1 (bound at ill-typed\113.hs:6:9)
+        v691 :: (t -> t1) -> t1 (bound at ill-typed\113.hs:6:1)
+  |
+6 | v691 = \x -> (x + 1 ) (if x then x + 1 else x - 2.2)           
+  |                           ^

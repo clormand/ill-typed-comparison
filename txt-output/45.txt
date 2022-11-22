@@ -1,0 +1,98 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: False should be "False"
+showInt x =                                         
+    case x of
+        0 -> False
+        1 -> "one"
+        2 -> "two"
+        _ -> "many"
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\45.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\45.hs:9:13:
+    Couldn't match expected type `Bool' against inferred type `[Char]'
+    In the expression: "one"
+    In a case alternative: 1 -> "one"
+    In the expression:
+        case x of {
+          0 -> False
+          1 -> "one"
+          2 -> "two"
+          _ -> "many" }
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\45.hs, ill-typed\45.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\45.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\45.hs:9:14: error:
+    * Couldn't match type `[Char]' with `Bool'
+      Expected: Bool
+        Actual: String
+    * In the expression: "one"
+      In a case alternative: 1 -> "one"
+      In the expression:
+        case x of
+          0 -> False
+          1 -> "one"
+          2 -> "two"
+          _ -> "many"
+  |
+9 |         1 -> "one"
+  |              ^^^^^
+
+ill-typed\45.hs:10:14: error:
+    * Couldn't match type `[Char]' with `Bool'
+      Expected: Bool
+        Actual: String
+    * In the expression: "two"
+      In a case alternative: 2 -> "two"
+      In the expression:
+        case x of
+          0 -> False
+          1 -> "one"
+          2 -> "two"
+          _ -> "many"
+   |
+10 |         2 -> "two"
+   |              ^^^^^
+
+ill-typed\45.hs:11:14: error:
+    * Couldn't match type `[Char]' with `Bool'
+      Expected: Bool
+        Actual: String
+    * In the expression: "many"
+      In a case alternative: _ -> "many"
+      In the expression:
+        case x of
+          0 -> False
+          1 -> "one"
+          2 -> "two"
+          _ -> "many"
+   |
+11 |         _ -> "many"
+   |              ^^^^^^

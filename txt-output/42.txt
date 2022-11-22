@@ -1,0 +1,37 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.            
+v25 x = if x then succ x else x                          
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\41.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\41.hs:6:39:
+    No instance for (Num Bool)
+      arising from the literal `1' at ill-typed\41.hs:6:39
+    Possible fix: add an instance declaration for (Num Bool)
+    In the first argument of `g', namely `1'
+    In the first argument of `(++)', namely `g 1'
+    In the expression: g 1 ++ g True
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\42.hs, ill-typed\42.o )
+Linking ill-typed\42.exe ...

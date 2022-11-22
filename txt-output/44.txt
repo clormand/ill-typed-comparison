@@ -1,0 +1,123 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: foldr (+) xs should be foldr (+) 0 xs
+f = \xs -> (length xs, foldr (+) xs + 0)      
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\44.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\44.hs:6:29:
+    No instance for (Num [a])
+      arising from a use of `+' at ill-typed\44.hs:6:29-31
+    Possible fix: add an instance declaration for (Num [a])
+    In the first argument of `foldr', namely `(+)'
+    In the first argument of `(+)', namely `foldr (+) xs'
+    In the expression: foldr (+) xs + 0
+
+ill-typed\44.hs:6:38:
+    No instance for (Num ([[a]] -> [a]))
+      arising from the literal `0' at ill-typed\44.hs:6:38
+    Possible fix: add an instance declaration for (Num ([[a]] -> [a]))
+    In the second argument of `(+)', namely `0'
+    In the expression: foldr (+) xs + 0
+    In the expression: (length xs, foldr (+) xs + 0)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\44.hs, ill-typed\44.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\44.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\44.hs:6:13: error:
+    * Ambiguous type variable `t1' arising from a use of `length'
+      prevents the constraint `(Foldable t1)' from being solved.
+      Relevant bindings include
+        xs :: t1 a0 (bound at ill-typed\44.hs:6:6)
+        f :: t1 a0 -> (Int, t0 (t1 a0) -> t1 a0)
+          (bound at ill-typed\44.hs:6:1)
+      Probable fix: use a type annotation to specify what `t1' should be.
+      These potential instances exist:
+        instance Foldable (Either a) -- Defined in `Data.Foldable'
+        instance Foldable Maybe -- Defined in `Data.Foldable'
+        instance Foldable ((,) a) -- Defined in `Data.Foldable'
+        ...plus two others
+        ...plus 26 instances involving out-of-scope types
+        (use -fprint-potential-instances to see them all)
+    * In the expression: length xs
+      In the expression: (length xs, foldr (+) xs + 0)
+      In the expression: \ xs -> (length xs, foldr (+) xs + 0)
+  |
+6 | f = \xs -> (length xs, foldr (+) xs + 0)      
+  |             ^^^^^^
+
+ill-typed\44.hs:6:24: error:
+    * Ambiguous type variable `t0' arising from a use of `foldr'
+      prevents the constraint `(Foldable t0)' from being solved.
+      Relevant bindings include
+        f :: t1 a0 -> (Int, t0 (t1 a0) -> t1 a0)
+          (bound at ill-typed\44.hs:6:1)
+      Probable fix: use a type annotation to specify what `t0' should be.
+      These potential instances exist:
+        instance Foldable (Either a) -- Defined in `Data.Foldable'
+        instance Foldable Maybe -- Defined in `Data.Foldable'
+        instance Foldable ((,) a) -- Defined in `Data.Foldable'
+        ...plus two others
+        ...plus 26 instances involving out-of-scope types
+        (use -fprint-potential-instances to see them all)
+    * In the first argument of `(+)', namely `foldr (+) xs'
+      In the expression: foldr (+) xs + 0
+      In the expression: (length xs, foldr (+) xs + 0)
+  |
+6 | f = \xs -> (length xs, foldr (+) xs + 0)      
+  |                        ^^^^^
+
+ill-typed\44.hs:6:30: error:
+    * Ambiguous type variables `t1', `a0' arising from a use of `+'
+      prevents the constraint `(Num (t1 a0))' from being solved.
+      Relevant bindings include
+        xs :: t1 a0 (bound at ill-typed\44.hs:6:6)
+        f :: t1 a0 -> (Int, t0 (t1 a0) -> t1 a0)
+          (bound at ill-typed\44.hs:6:1)
+      Probable fix: use a type annotation to specify what `t1',
+                                                          `a0' should be.
+      These potential instances exist:
+        five instances involving out-of-scope types
+        (use -fprint-potential-instances to see them all)
+    * In the first argument of `foldr', namely `(+)'
+      In the first argument of `(+)', namely `foldr (+) xs'
+      In the expression: foldr (+) xs + 0
+  |
+6 | f = \xs -> (length xs, foldr (+) xs + 0)      
+  |                              ^^^
+
+ill-typed\44.hs:6:37: error:
+    * No instance for (Num (t0 (t1 a0) -> t1 a0))
+        arising from a use of `+'
+        (maybe you haven't applied a function to enough arguments?)
+    * In the expression: foldr (+) xs + 0
+      In the expression: (length xs, foldr (+) xs + 0)
+      In the expression: \ xs -> (length xs, foldr (+) xs + 0)
+  |
+6 | f = \xs -> (length xs, foldr (+) xs + 0)      
+  |                                     ^

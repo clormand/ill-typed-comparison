@@ -1,0 +1,67 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: (x,xs) should be (x:xs)                   
+maxOfList [ ] = error "empty list"
+maxOfList [x] = x
+maxOfList (x , xs) = x `max` maxOfList xs
+type Parser s a = [s ] -> [(a, [s ])]             
+(<$>) :: (a -> b) -> Parser s a -> Parser s b
+(<$>) = undefined
+(<*>) :: Parser s (a -> b) -> Parser s a -> Parser s b
+(<*>) = undefined
+(<*) :: Parser s a -> Parser s b -> Parser s a
+(<*) = undefined
+symbol :: Char -> Parser Char Char
+symbol = undefined
+token :: String -> Parser Char String
+token = undefined
+option :: Parser s a -> a -> Parser s a
+option = undefined
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\55.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\55.hs:8:10:
+    Couldn't match expected type `[t]' against inferred type `(a, b)'
+    In the pattern: (x, xs)
+    In the definition of `maxOfList':
+        maxOfList (x, xs) = x `max` maxOfList xs
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\55.hs, ill-typed\55.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\55.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\55.hs:8:11: error:
+    * Couldn't match expected type: [a]
+                  with actual type: (a, [a])
+    * In the pattern: (x, xs)
+      In an equation for `maxOfList':
+          maxOfList (x, xs) = x `max` maxOfList xs
+    * Relevant bindings include
+        maxOfList :: [a] -> a (bound at ill-typed\55.hs:6:1)
+  |
+8 | maxOfList (x , xs) = x `max` maxOfList xs
+  |           ^^^^^^^^

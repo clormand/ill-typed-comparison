@@ -1,0 +1,53 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+v65 = \x -> let y = (\z -> let f = x z                       
+                           in \w -> w)
+            in (y 5, y True)
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\102.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\102.hs:8:18:
+    No instance for (Num Bool)
+      arising from the literal `5' at ill-typed\102.hs:8:18
+    Possible fix: add an instance declaration for (Num Bool)
+    In the first argument of `y', namely `5'
+    In the expression: y 5
+    In the expression: (y 5, y True)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\102.hs, ill-typed\102.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\102.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\102.hs:8:19: error:
+    * No instance for (Num Bool) arising from the literal `5'
+    * In the first argument of `y', namely `5'
+      In the expression: y 5
+      In the expression: (y 5, y True)
+  |
+8 |             in (y 5, y True)
+  |                   ^

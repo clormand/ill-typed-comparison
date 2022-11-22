@@ -1,0 +1,59 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: y e should be e y 
+f c = if c then \ g x -> g x                                        
+           else \ e y -> y e
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\67.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\67.hs:7:25:
+    Occurs check: cannot construct the infinite type:
+      t = (t -> t1) -> t1
+    Probable cause: `y' is applied to too many arguments
+    In the expression: y e
+    In the expression: \ e y -> y e
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\67.hs, ill-typed\67.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\67.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\67.hs:7:17: error:
+    * Couldn't match type `t' with `(t -> t1) -> t1'
+      Expected: (t -> t1) -> t -> t1
+        Actual: (t -> t1) -> ((t -> t1) -> t1) -> t1
+      `t' is a rigid type variable bound by
+        the inferred type of f :: Bool -> (t -> t1) -> t -> t1
+        at ill-typed\67.hs:(6,1)-(7,28)
+    * In the expression: \ e y -> y e
+      In the expression: if c then \ g x -> g x else \ e y -> y e
+      In an equation for `f':
+          f c = if c then \ g x -> g x else \ e y -> y e
+    * Relevant bindings include
+        f :: Bool -> (t -> t1) -> t -> t1 (bound at ill-typed\67.hs:6:1)
+  |
+7 |            else \ e y -> y e
+  |                 ^^^^^^^^^^^^

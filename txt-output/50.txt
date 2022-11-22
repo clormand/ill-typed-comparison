@@ -1,0 +1,50 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: xs and 0 should be swapped
+sumFloat :: [Float ] -> Float                     
+sumFloat xs = foldr (+) xs 0 + 0.0
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\50.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\50.hs:7:14:
+    Couldn't match expected type `Float'
+           against inferred type `[Float]'
+    In the expression: foldr (+) xs 0 + 0.0
+    In the definition of `sumFloat': sumFloat xs = foldr (+) xs 0 + 0.0
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\50.hs, ill-typed\50.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\50.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\50.hs:7:25: error:
+    * Couldn't match expected type `Float' with actual type `[Float]'
+    * In the second argument of `foldr', namely `xs'
+      In the first argument of `(+)', namely `foldr (+) xs 0'
+      In the expression: foldr (+) xs 0 + 0.0
+  |
+7 | sumFloat xs = foldr (+) xs 0 + 0.0
+  |                         ^^

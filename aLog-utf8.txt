@@ -1,0 +1,14 @@
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\99.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\99.hs:6:29:
+    No instance for (Num (t1 -> t))
+      arising from the literal `2' at ill-typed\99.hs:6:29
+    Possible fix: add an instance declaration for (Num (t1 -> t))
+    In the expression: 2
+    In the expression: [x, 2]
+    In the expression: (x a, x 2, [x, 2])

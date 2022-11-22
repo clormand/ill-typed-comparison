@@ -1,0 +1,62 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: v should be of type Bool
+f [] = False                                            
+f [v] = v
+f (h1:h2:t) = h1 `gt` h2
+gt :: Int -> Int -> Bool
+gt = undefined
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\116.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\116.hs:8:14:
+    Couldn't match expected type `Int' against inferred type `Bool'
+    In the first argument of `gt', namely `h1'
+    In the expression: h1 `gt` h2
+    In the definition of `f': f (h1 : h2 : t) = h1 `gt` h2
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\116.hs, ill-typed\116.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\116.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\116.hs:8:15: error:
+    * Couldn't match expected type `Int' with actual type `Bool'
+    * In the first argument of `gt', namely `h1'
+      In the expression: h1 `gt` h2
+      In an equation for `f': f (h1 : h2 : t) = h1 `gt` h2
+  |
+8 | f (h1:h2:t) = h1 `gt` h2
+  |               ^^
+
+ill-typed\116.hs:8:23: error:
+    * Couldn't match expected type `Int' with actual type `Bool'
+    * In the second argument of `gt', namely `h2'
+      In the expression: h1 `gt` h2
+      In an equation for `f': f (h1 : h2 : t) = h1 `gt` h2
+  |
+8 | f (h1:h2:t) = h1 `gt` h2
+  |                       ^^

@@ -1,0 +1,40 @@
+﻿[1 of 1] Compiling Main             ( ill-typed\99.hs, ill-typed\99.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\99.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\99.hs:6:23: error:
+    * Ambiguous type variable `t0' arising from the literal `2'
+      prevents the constraint `(Num t0)' from being solved.
+      Relevant bindings include
+        a :: t0 (bound at ill-typed\99.hs:6:10)
+        x :: t0 -> b0 (bound at ill-typed\99.hs:6:8)
+        v63 :: (t0 -> b0) -> t0 -> (b0, b0, [t0 -> b0])
+          (bound at ill-typed\99.hs:6:1)
+      Probable fix: use a type annotation to specify what `t0' should be.
+      These potential instances exist:
+        instance Num Integer -- Defined in `GHC.Num'
+        instance Num Double -- Defined in `GHC.Float'
+        instance Num Float -- Defined in `GHC.Float'
+        ...plus two others
+        ...plus one instance involving out-of-scope types
+        (use -fprint-potential-instances to see them all)
+    * In the first argument of `x', namely `2'
+      In the expression: x 2
+      In the expression: (x a, x 2, [x, 2])
+  |
+6 | v63 = \x a -> (x a, x 2, [x, 2])                              
+  |                       ^
+
+ill-typed\99.hs:6:30: error:
+    * No instance for (Num (t0 -> b0)) arising from the literal `2'
+        (maybe you haven't applied a function to enough arguments?)
+    * In the expression: 2
+      In the expression: [x, 2]
+      In the expression: (x a, x 2, [x, 2])
+  |
+6 | v63 = \x a -> (x a, x 2, [x, 2])                              
+  |                              ^

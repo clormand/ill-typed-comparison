@@ -1,0 +1,54 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [] should be 0
+sumLengths [] = []                                                  
+sumLengths (xs:xss) = length xs + sumLengths xss
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\65.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\65.hs:7:34:
+    Couldn't match expected type `Int' against inferred type `[a]'
+      Expected type: [[a1]] -> Int
+      Inferred type: [[a1]] -> [a]
+    In the second argument of `(+)', namely `sumLengths xss'
+    In the expression: length xs + sumLengths xss
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\65.hs, ill-typed\65.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\65.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\65.hs:7:23: error:
+    * Couldn't match expected type `[a1]' with actual type `Int'
+    * In the first argument of `(+)', namely `length xs'
+      In the expression: length xs + sumLengths xss
+      In an equation for `sumLengths':
+          sumLengths (xs : xss) = length xs + sumLengths xss
+    * Relevant bindings include
+        sumLengths :: [t a] -> [a1] (bound at ill-typed\65.hs:6:1)
+  |
+7 | sumLengths (xs:xss) = length xs + sumLengths xss
+  |                       ^^^^^^^^^

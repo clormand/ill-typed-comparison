@@ -1,0 +1,51 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+v61 = \x -> if x then succ x else 2                           
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\97.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\97.hs:6:34:
+    No instance for (Num Bool)
+      arising from the literal `2' at ill-typed\97.hs:6:34
+    Possible fix: add an instance declaration for (Num Bool)
+    In the expression: 2
+    In the expression: if x then succ x else 2
+    In the expression: \ x -> if x then succ x else 2
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\97.hs, ill-typed\97.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\97.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\97.hs:6:35: error:
+    * No instance for (Num Bool) arising from the literal `2'
+    * In the expression: 2
+      In the expression: if x then succ x else 2
+      In the expression: \ x -> if x then succ x else 2
+  |
+6 | v61 = \x -> if x then succ x else 2                           
+  |                                   ^

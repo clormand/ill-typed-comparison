@@ -1,0 +1,51 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [1] and True should be Int
+v12 = [1,[1],True]                          
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\22.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\22.hs:6:13:
+    Couldn't match expected type `[t]' against inferred type `Bool'
+    In the expression: True
+    In the expression: [1, [1], True]
+    In the definition of `v12': v12 = [1, [1], True]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\22.hs, ill-typed\22.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\22.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\22.hs:6:14: error:
+    * Couldn't match expected type `[a]' with actual type `Bool'
+    * In the expression: True
+      In the expression: [1, [1], True]
+      In an equation for `v12': v12 = [1, [1], True]
+    * Relevant bindings include
+        v12 :: [[a]] (bound at ill-typed\22.hs:6:1)
+  |
+6 | v12 = [1,[1],True]                          
+  |              ^^^^

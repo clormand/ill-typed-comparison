@@ -1,0 +1,53 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+v67 = \z -> let x = z                                         
+            in (let y = z 1 in x True)
+      
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\104.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\104.hs:7:26:
+    No instance for (Num Bool)
+      arising from the literal `1' at ill-typed\104.hs:7:26
+    Possible fix: add an instance declaration for (Num Bool)
+    In the first argument of `z', namely `1'
+    In the expression: z 1
+    In the definition of `y': y = z 1
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\104.hs, ill-typed\104.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\104.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\104.hs:7:27: error:
+    * No instance for (Num Bool) arising from the literal `1'
+    * In the first argument of `z', namely `1'
+      In the expression: z 1
+      In an equation for `y': y = z 1
+  |
+7 |             in (let y = z 1 in x True)
+  |                           ^

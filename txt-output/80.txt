@@ -1,0 +1,64 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: x should be [x]
+split xs = case xs of                                               
+    [] -> ([],[])
+    [x] -> (x,[])
+    (x:y:zs) -> let (xs, ys) = split zs
+                in (x:xs, y:ys)
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\80.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\80.hs:10:22:
+    Occurs check: cannot construct the infinite type: a = [a]
+      Expected type: [[a]]
+      Inferred type: [a]
+    In the second argument of `(:)', namely `xs'
+    In the expression: x : xs
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\80.hs, ill-typed\80.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\80.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\80.hs:10:21: error:
+    * Couldn't match expected type `a' with actual type `[a]'
+      `a' is a rigid type variable bound by
+        the inferred type of split :: [[a]] -> ([a], [[a]])
+        at ill-typed\80.hs:(6,1)-(10,31)
+    * In the first argument of `(:)', namely `x'
+      In the expression: x : xs
+      In the expression: (x : xs, y : ys)
+    * Relevant bindings include
+        xs :: [a] (bound at ill-typed\80.hs:9:22)
+        ys :: [[a]] (bound at ill-typed\80.hs:9:26)
+        zs :: [[a]] (bound at ill-typed\80.hs:9:10)
+        y :: [a] (bound at ill-typed\80.hs:9:8)
+        x :: [a] (bound at ill-typed\80.hs:9:6)
+        split :: [[a]] -> ([a], [[a]]) (bound at ill-typed\80.hs:6:1)
+   |
+10 |                 in (x:xs, y:ys)
+   |                     ^

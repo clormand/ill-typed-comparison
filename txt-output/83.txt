@@ -1,0 +1,64 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: x in the first line should be [x]
+insert x [] = x                                                     
+insert x (y:ys) 
+    | x > y = y : insert x ys
+    | otherwise = x : y : ys
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\83.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\83.hs:8:18:
+    Occurs check: cannot construct the infinite type: a = [a]
+      Expected type: a -> [a] -> [a]
+      Inferred type: a -> [a] -> a
+    In the second argument of `(:)', namely `insert x ys'
+    In the expression: y : insert x ys
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\83.hs, ill-typed\83.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\83.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\83.hs:8:15: error:
+    * Couldn't match expected type `a' with actual type `[a]'
+      `a' is a rigid type variable bound by
+        the inferred type of insert :: [a] -> [[a]] -> [a]
+        at ill-typed\83.hs:(6,1)-(9,28)
+    * In the first argument of `(:)', namely `y'
+      In the expression: y : insert x ys
+      In an equation for `insert':
+          insert x (y : ys)
+            | x > y = y : insert x ys
+            | otherwise = x : y : ys
+    * Relevant bindings include
+        ys :: [[a]] (bound at ill-typed\83.hs:7:13)
+        y :: [a] (bound at ill-typed\83.hs:7:11)
+        x :: [a] (bound at ill-typed\83.hs:7:8)
+        insert :: [a] -> [[a]] -> [a] (bound at ill-typed\83.hs:6:1)
+  |
+8 |     | x > y = y : insert x ys
+  |               ^

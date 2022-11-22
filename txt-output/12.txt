@@ -1,0 +1,73 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: xs should be pushed into (++) as its one argument
+f xs ys = ((map toUpper) . (++)) xs ys          
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\12.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\12.hs:6:27:
+    Couldn't match expected type `[Char]'
+           against inferred type `[a] -> [a]'
+    In the second argument of `(.)', namely `(++)'
+    In the expression: ((map toUpper) . (++)) xs ys
+    In the definition of `f': f xs ys = ((map toUpper) . (++)) xs ys
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\12.hs, ill-typed\12.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\12.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\12.hs:6:13: error:
+    * Couldn't match type: [Char]
+                     with: t -> t1
+      Expected: [Char] -> t -> t1
+        Actual: [Char] -> [Char]
+    * Possible cause: `map' is applied to too many arguments
+      In the first argument of `(.)', namely `(map toUpper)'
+      In the expression: ((map toUpper) . (++)) xs ys
+      In an equation for `f': f xs ys = ((map toUpper) . (++)) xs ys
+    * Relevant bindings include
+        ys :: t (bound at ill-typed\12.hs:6:6)
+        f :: [a] -> t -> t1 (bound at ill-typed\12.hs:6:1)
+  |
+6 | f xs ys = ((map toUpper) . (++)) xs ys          
+  |             ^^^^^^^^^^^
+
+ill-typed\12.hs:6:28: error:
+    * Couldn't match type: [a] -> [a]
+                     with: [Char]
+      Expected: [a] -> [Char]
+        Actual: [a] -> [a] -> [a]
+    * Probable cause: `(++)' is applied to too few arguments
+      In the second argument of `(.)', namely `(++)'
+      In the expression: ((map toUpper) . (++)) xs ys
+      In an equation for `f': f xs ys = ((map toUpper) . (++)) xs ys
+    * Relevant bindings include
+        xs :: [a] (bound at ill-typed\12.hs:6:3)
+        f :: [a] -> t -> t1 (bound at ill-typed\12.hs:6:1)
+  |
+6 | f xs ys = ((map toUpper) . (++)) xs ys          
+  |                            ^^^^

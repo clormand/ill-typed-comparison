@@ -1,0 +1,35 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: 0 and (+) should be swapped
+sumInt is = foldr 0 (+) is                        
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\46.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\46.hs:6:12:
+    Couldn't match expected type `Bool' against inferred type `[Char]'
+    In the expression: "b"
+    In the expression: if "b" then "yes!" else "no!"
+    In the definition of `test': test b = if "b" then "yes!" else "no!"
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\47.hs, ill-typed\47.o )
+Linking ill-typed\47.exe ...

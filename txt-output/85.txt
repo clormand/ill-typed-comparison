@@ -1,0 +1,66 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [lst] should be lst
+add2 str lst                                                         
+    | str `elem` lst = [lst]
+    | True = str:lst
+v = add2 "error" ["location"]
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\85.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\85.hs:8:13:
+    Occurs check: cannot construct the infinite type: a = [a]
+      Expected type: [[a]]
+      Inferred type: [a]
+    In the expression: str : lst
+    In the definition of `add2':
+        add2 str lst
+               | str `elem` lst = [lst]
+               | True = str : lst
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\85.hs, ill-typed\85.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\85.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\85.hs:8:14: error:
+    * Couldn't match expected type `[a]' with actual type `a'
+      `a' is a rigid type variable bound by
+        the inferred type of add2 :: a -> [a] -> [[a]]
+        at ill-typed\85.hs:(6,1)-(8,20)
+    * In the first argument of `(:)', namely `str'
+      In the expression: str : lst
+      In an equation for `add2':
+          add2 str lst
+            | str `elem` lst = [lst]
+            | True = str : lst
+    * Relevant bindings include
+        lst :: [a] (bound at ill-typed\85.hs:6:10)
+        str :: a (bound at ill-typed\85.hs:6:6)
+        add2 :: a -> [a] -> [[a]] (bound at ill-typed\85.hs:6:1)
+  |
+8 |     | True = str:lst
+  |              ^^^

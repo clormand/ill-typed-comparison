@@ -1,0 +1,56 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: t and y should be swapped
+v68 = \f y (h:t) -> t y                                       
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\105.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\105.hs:6:20:
+    Couldn't match expected type `t1 -> t' against inferred type `[t2]'
+    In the expression: t y
+    In the expression: \ f y (h : t) -> t y
+    In the definition of `v68': v68 = \ f y (h : t) -> t y
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\105.hs, ill-typed\105.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\105.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\105.hs:6:21: error:
+    * Couldn't match expected type: t -> t1
+                  with actual type: [a]
+    * The function `t' is applied to one value argument,
+        but its type `[a]' has none
+      In the expression: t y
+      In the expression: \ f y (h : t) -> t y
+    * Relevant bindings include
+        t :: [a] (bound at ill-typed\105.hs:6:15)
+        h :: a (bound at ill-typed\105.hs:6:13)
+        y :: t (bound at ill-typed\105.hs:6:10)
+        v68 :: p -> t -> [a] -> t1 (bound at ill-typed\105.hs:6:1)
+  |
+6 | v68 = \f y (h:t) -> t y                                       
+  |                     ^^^

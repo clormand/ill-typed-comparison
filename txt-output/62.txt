@@ -1,0 +1,35 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: 0 and xs should be swapped
+f xs = 0 !! xs                                    
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\61.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\61.hs:6:10:
+    Couldn't match expected type `a -> b' against inferred type `[a1]'
+    In the first argument of `map', namely `[1 .. 5]'
+    In the expression: map ([1 .. 5]) ((> 10) . (^ 2))
+    In the definition of `v30': v30 = map ([1 .. 5]) ((> 10) . (^ 2))
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\62.hs, ill-typed\62.o )
+Linking ill-typed\62.exe ...

@@ -1,0 +1,66 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: "abc" and toLower should be swapped
+map2 f [] = []                                                      
+map2 f (x:xs) = f x : map2 xs
+test = map2 "abc" toLower
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\81.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\81.hs:7:22:
+    Couldn't match expected type `[t]' against inferred type `t -> a'
+    Probable cause: `map2' is applied to too few arguments
+    In the second argument of `(:)', namely `map2 xs'
+    In the expression: f x : map2 xs
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\81.hs, ill-typed\81.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\81.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\81.hs:6:1: error:
+    * Couldn't match type: t -> a
+                     with: [t]
+      Expected: [t] -> [a]
+        Actual: (t -> a) -> [t] -> [a]
+    * Relevant bindings include
+        map2 :: [t] -> [a] (bound at ill-typed\81.hs:6:1)
+  |
+6 | map2 f [] = []                                                      
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+ill-typed\81.hs:8:8: error:
+    * Couldn't match expected type: (Char -> Char) -> t
+                  with actual type: [a0]
+    * The function `map2' is applied to two value arguments,
+        but its type `[Char] -> [a0]' has only one
+      In the expression: map2 "abc" toLower
+      In an equation for `test': test = map2 "abc" toLower
+    * Relevant bindings include
+        test :: t (bound at ill-typed\81.hs:8:1)
+  |
+8 | test = map2 "abc" toLower
+  |        ^^^^^^^^^^^^^^^^^^

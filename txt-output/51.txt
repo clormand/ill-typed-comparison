@@ -1,0 +1,55 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: map (+1) needs an argument of type [Int]
+incrementList :: [Int] -> [Int]                   
+incrementList xs = map (+1) ++ [1]
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\51.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\51.hs:7:19:
+    Couldn't match expected type `[Int]'
+           against inferred type `[a] -> [a]'
+    In the first argument of `(++)', namely `map (+ 1)'
+    In the expression: map (+ 1) ++ [1]
+    In the definition of `incrementList':
+        incrementList xs = map (+ 1) ++ [1]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\51.hs, ill-typed\51.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\51.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\51.hs:7:20: error:
+    * Couldn't match expected type: [Int]
+                  with actual type: [b0] -> [b0]
+    * Probable cause: `map' is applied to too few arguments
+      In the first argument of `(++)', namely `map (+ 1)'
+      In the expression: map (+ 1) ++ [1]
+      In an equation for `incrementList':
+          incrementList xs = map (+ 1) ++ [1]
+  |
+7 | incrementList xs = map (+1) ++ [1]
+  |                    ^^^^^^^^

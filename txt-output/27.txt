@@ -1,0 +1,51 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: x in condition should be even x or odd x.            
+v17 = (\x -> x + (if x then 1 else 2))                
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\27.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\27.hs:6:28:
+    No instance for (Num Bool)
+      arising from the literal `1' at ill-typed\27.hs:6:28
+    Possible fix: add an instance declaration for (Num Bool)
+    In the expression: 1
+    In the second argument of `(+)', namely `(if x then 1 else 2)'
+    In the expression: x + (if x then 1 else 2)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\27.hs, ill-typed\27.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\27.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\27.hs:6:16: error:
+    * No instance for (Num Bool) arising from a use of `+'
+    * In the expression: x + (if x then 1 else 2)
+      In the expression: \ x -> x + (if x then 1 else 2)
+      In an equation for `v17': v17 = (\ x -> x + (if x then 1 else 2))
+  |
+6 | v17 = (\x -> x + (if x then 1 else 2))                
+  |                ^

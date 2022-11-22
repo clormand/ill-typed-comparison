@@ -1,0 +1,75 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: body of the first alternative doesn't have right type
+fail3 p [] = p + p                                      
+fail3 p (h:t) = if p True then [h] else t
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\109.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\109.hs:7:31:
+    Couldn't match expected type `Bool -> Bool'
+           against inferred type `[a]'
+    In the expression: [h]
+    In the expression: if p True then [h] else t
+    In the definition of `fail3':
+        fail3 p (h : t) = if p True then [h] else t
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\109.hs, ill-typed\109.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\109.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\109.hs:7:32: error:
+    * Couldn't match expected type: Bool -> Bool
+                  with actual type: [a]
+    * In the expression: [h]
+      In the expression: if p True then [h] else t
+      In an equation for `fail3':
+          fail3 p (h : t) = if p True then [h] else t
+    * Relevant bindings include
+        t :: [a] (bound at ill-typed\109.hs:7:12)
+        h :: a (bound at ill-typed\109.hs:7:10)
+        fail3 :: (Bool -> Bool) -> [a] -> Bool -> Bool
+          (bound at ill-typed\109.hs:6:1)
+  |
+7 | fail3 p (h:t) = if p True then [h] else t
+  |                                ^^^
+
+ill-typed\109.hs:7:41: error:
+    * Couldn't match expected type: Bool -> Bool
+                  with actual type: [a]
+    * In the expression: t
+      In the expression: if p True then [h] else t
+      In an equation for `fail3':
+          fail3 p (h : t) = if p True then [h] else t
+    * Relevant bindings include
+        t :: [a] (bound at ill-typed\109.hs:7:12)
+        h :: a (bound at ill-typed\109.hs:7:10)
+        fail3 :: (Bool -> Bool) -> [a] -> Bool -> Bool
+          (bound at ill-typed\109.hs:6:1)
+  |
+7 | fail3 p (h:t) = if p True then [h] else t
+  |                                         ^

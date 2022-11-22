@@ -1,0 +1,54 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: ++ should be :
+rever = rev []                                                      
+    where rev rs [] = rs
+          rev rs (x:xs) = rev (x++rs) xs
+v42 = rever [1,2,3]
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\78.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\78.hs:9:13:
+    No instance for (Num [a])
+      arising from the literal `1' at ill-typed\78.hs:9:13
+    Possible fix: add an instance declaration for (Num [a])
+    In the expression: 1
+    In the first argument of `rever', namely `[1, 2, 3]'
+    In the expression: rever [1, 2, 3]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\78.hs, ill-typed\78.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\78.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\78.hs:9:14: error:
+    * No instance for (Num [a0]) arising from the literal `1'
+    * In the expression: 1
+      In the first argument of `rever', namely `[1, 2, 3]'
+      In the expression: rever [1, 2, 3]
+  |
+9 | v42 = rever [1,2,3]
+  |              ^

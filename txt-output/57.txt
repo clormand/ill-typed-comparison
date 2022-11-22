@@ -1,0 +1,53 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: type of (++) doesn't match String -> Char -> String
+test12 :: Parser Char String                        
+test12 = (++) <$> token "hello world"
+              <*> symbol '!'
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\57.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\57.hs:6:10:
+    Not in scope: type constructor or class `Parser'
+
+ill-typed\57.hs:7:14: Not in scope: `<$>'
+
+ill-typed\57.hs:7:18: Not in scope: `token'
+
+ill-typed\57.hs:8:14: Not in scope: `<*>'
+
+ill-typed\57.hs:8:18: Not in scope: `symbol'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\57.hs, ill-typed\57.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\57.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\57.hs:6:11: error:
+    Not in scope: type constructor or class `Parser'
+  |
+6 | test12 :: Parser Char String                        
+  |           ^^^^^^

@@ -1,0 +1,55 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.
+f2 x = map x [x+2]                             
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\14.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\14.hs:6:14:
+    Occurs check: cannot construct the infinite type: a = a -> b
+    Probable cause: `+' is applied to too few arguments
+    In the expression: x + 2
+    In the second argument of `map', namely `[x + 2]'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\14.hs, ill-typed\14.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\14.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\14.hs:6:15: error:
+    * Couldn't match expected type `a' with actual type `a -> b'
+      `a' is a rigid type variable bound by
+        the inferred type of f2 :: (a -> b) -> [b]
+        at ill-typed\14.hs:6:1-18
+    * In the first argument of `(+)', namely `x'
+      In the expression: x + 2
+      In the second argument of `map', namely `[x + 2]'
+    * Relevant bindings include
+        x :: a -> b (bound at ill-typed\14.hs:6:4)
+        f2 :: (a -> b) -> [b] (bound at ill-typed\14.hs:6:1)
+  |
+6 | f2 x = map x [x+2]                             
+  |               ^

@@ -1,0 +1,63 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [1 .. 5] and ((>10) . (^2)) should be swapped
+v30 = map [1 .. 5] ((>10) . (^2))
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\61.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\61.hs:6:10:
+    Couldn't match expected type `a -> b' against inferred type `[a1]'
+    In the first argument of `map', namely `[1 .. 5]'
+    In the expression: map ([1 .. 5]) ((> 10) . (^ 2))
+    In the definition of `v30': v30 = map ([1 .. 5]) ((> 10) . (^ 2))
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\61.hs, ill-typed\61.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\61.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\61.hs:6:11: error:
+    * Couldn't match expected type: a0 -> b
+                  with actual type: [a2]
+    * In the first argument of `map', namely `[1 .. 5]'
+      In the expression: map [1 .. 5] ((> 10) . (^ 2))
+      In an equation for `v30': v30 = map [1 .. 5] ((> 10) . (^ 2))
+    * Relevant bindings include
+        v30 :: [b] (bound at ill-typed\61.hs:6:1)
+  |
+6 | v30 = map [1 .. 5] ((>10) . (^2))
+  |           ^^^^^^^^
+
+ill-typed\61.hs:6:21: error:
+    * Couldn't match expected type: [a0]
+                  with actual type: b0 -> Bool
+    * Probable cause: `(.)' is applied to too few arguments
+      In the second argument of `map', namely `((> 10) . (^ 2))'
+      In the expression: map [1 .. 5] ((> 10) . (^ 2))
+      In an equation for `v30': v30 = map [1 .. 5] ((> 10) . (^ 2))
+  |
+6 | v30 = map [1 .. 5] ((>10) . (^2))
+  |                     ^^^^^^^^^^^^

@@ -1,0 +1,61 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: ord should be something has argument type Bool
+f x ys = ord (if x then x else null ys == x)                        
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\70.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\70.hs:6:24:
+    Couldn't match expected type `Char' against inferred type `Bool'
+    In the expression: x
+    In the first argument of `ord', namely
+        `(if x then x else null ys == x)'
+    In the expression: ord (if x then x else null ys == x)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\70.hs, ill-typed\70.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\70.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\70.hs:6:25: error:
+    * Couldn't match expected type `Char' with actual type `Bool'
+    * In the expression: x
+      In the first argument of `ord', namely
+        `(if x then x else null ys == x)'
+      In the expression: ord (if x then x else null ys == x)
+  |
+6 | f x ys = ord (if x then x else null ys == x)                        
+  |                         ^
+
+ill-typed\70.hs:6:32: error:
+    * Couldn't match expected type `Char' with actual type `Bool'
+    * In the expression: null ys == x
+      In the first argument of `ord', namely
+        `(if x then x else null ys == x)'
+      In the expression: ord (if x then x else null ys == x)
+  |
+6 | f x ys = ord (if x then x else null ys == x)                        
+  |                                ^^^^^^^^^^^^

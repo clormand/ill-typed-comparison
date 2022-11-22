@@ -1,0 +1,70 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: <* should be <*> (or something has the same type as
+test14 = (++) <$> ( (:) <$> symbol '!'
+                        <* token "hello")
+              <$> token "world"
+             
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\60.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\60.hs:6:14: Not in scope: `<$>'
+
+ill-typed\60.hs:6:24: Not in scope: `<$>'
+
+ill-typed\60.hs:6:28: Not in scope: `symbol'
+
+ill-typed\60.hs:7:24: Not in scope: `<*'
+
+ill-typed\60.hs:7:27: Not in scope: `token'
+
+ill-typed\60.hs:8:14: Not in scope: `<$>'
+
+ill-typed\60.hs:8:18: Not in scope: `token'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\60.hs, ill-typed\60.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\60.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\60.hs:6:29: error:
+    * Variable not in scope: symbol :: Char -> a0 -> a1
+    * Perhaps you meant `isSymbol' (imported from Data.Char)
+  |
+6 | test14 = (++) <$> ( (:) <$> symbol '!'
+  |                             ^^^^^^
+
+ill-typed\60.hs:7:28: error:
+    Variable not in scope: token :: String -> a0 -> b0
+  |
+7 |                         <* token "hello")
+  |                            ^^^^^
+
+ill-typed\60.hs:8:19: error:
+    Variable not in scope: token :: String -> f a0
+  |
+8 |               <$> token "world"
+  |                   ^^^^^

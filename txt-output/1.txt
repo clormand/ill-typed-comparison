@@ -1,0 +1,50 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: missing parentheses around "a" ++ "b" 
+v1 = print "a" ++ "b"
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\1.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\1.hs:6:5:
+    Couldn't match expected type `[a]' against inferred type `IO ()'
+    In the first argument of `(++)', namely `print "a"'
+    In the expression: print "a" ++ "b"
+    In the definition of `v1': v1 = print "a" ++ "b"
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\1.hs, ill-typed\1.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\1.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\1.hs:6:6: error:
+    * Couldn't match expected type: [Char]
+                  with actual type: IO ()
+    * In the first argument of `(++)', namely `print "a"'
+      In the expression: print "a" ++ "b"
+      In an equation for `v1': v1 = print "a" ++ "b"
+  |
+6 | v1 = print "a" ++ "b"
+  |      ^^^^^^^^^

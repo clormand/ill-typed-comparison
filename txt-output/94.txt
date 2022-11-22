@@ -1,0 +1,59 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [] should be 0
+sum' [] = []                                            
+sum' (x:xs) = x `plus` sum' xs
+plus = (+) :: Int -> Int -> Int
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\94.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\94.hs:7:23:
+    Couldn't match expected type `Int' against inferred type `[a]'
+      Expected type: [Int] -> Int
+      Inferred type: [Int] -> [a]
+    In the second argument of `plus', namely `sum' xs'
+    In the expression: x `plus` sum' xs
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\94.hs, ill-typed\94.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\94.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\94.hs:6:1: error:
+    Couldn't match type `[a0]' with `Int'
+    Expected: [Int] -> Int
+      Actual: [Int] -> [a0]
+  |
+6 | sum' [] = []                                            
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+ill-typed\94.hs:7:15: error:
+    * Couldn't match expected type `[a0]' with actual type `Int'
+    * In the expression: x `plus` sum' xs
+      In an equation for sum': sum' (x : xs) = x `plus` sum' xs
+  |
+7 | sum' (x:xs) = x `plus` sum' xs
+  |               ^^^^^^^^^^^^^^^^

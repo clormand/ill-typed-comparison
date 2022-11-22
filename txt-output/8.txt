@@ -1,0 +1,62 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [1,2,3] and show should be swapped
+v7 = map [1,2,3] show             
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\8.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\8.hs:6:9:
+    Couldn't match expected type `a -> b' against inferred type `[a1]'
+    In the first argument of `map', namely `[1, 2, 3]'
+    In the expression: map [1, 2, 3] show
+    In the definition of `v7': v7 = map [1, 2, 3] show
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\8.hs, ill-typed\8.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\8.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\8.hs:6:10: error:
+    * Couldn't match expected type: a0 -> b
+                  with actual type: [a1]
+    * In the first argument of `map', namely `[1, 2, 3]'
+      In the expression: map [1, 2, 3] show
+      In an equation for `v7': v7 = map [1, 2, 3] show
+    * Relevant bindings include v7 :: [b] (bound at ill-typed\8.hs:6:1)
+  |
+6 | v7 = map [1,2,3] show             
+  |          ^^^^^^^
+
+ill-typed\8.hs:6:18: error:
+    * Couldn't match expected type: [a0]
+                  with actual type: a2 -> String
+    * Probable cause: `show' is applied to too few arguments
+      In the second argument of `map', namely `show'
+      In the expression: map [1, 2, 3] show
+      In an equation for `v7': v7 = map [1, 2, 3] show
+  |
+6 | v7 = map [1,2,3] show             
+  |                  ^^^^

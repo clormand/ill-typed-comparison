@@ -1,0 +1,89 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: should use \ x y -> ...
+v3 = zipWith (\(x,y) -> x + y) [1,2] [3,4,5]          
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\4.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\4.hs:6:24:
+    No instance for (Num (b -> c))
+      arising from a use of `+' at ill-typed\4.hs:6:24-28
+    Possible fix: add an instance declaration for (Num (b -> c))
+    In the expression: x + y
+    In the first argument of `zipWith', namely `(\ (x, y) -> x + y)'
+    In the expression: zipWith (\ (x, y) -> x + y) [1, 2] [3, 4, 5]
+
+ill-typed\4.hs:6:32:
+    No instance for (Num (b -> c, b -> c))
+      arising from the literal `1' at ill-typed\4.hs:6:32
+    Possible fix:
+      add an instance declaration for (Num (b -> c, b -> c))
+    In the expression: 1
+    In the second argument of `zipWith', namely `[1, 2]'
+    In the expression: zipWith (\ (x, y) -> x + y) [1, 2] [3, 4, 5]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\4.hs, ill-typed\4.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\4.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\4.hs:6:27: error:
+    * No instance for (Num (b0 -> c0)) arising from a use of `+'
+        (maybe you haven't applied a function to enough arguments?)
+    * In the expression: x + y
+      In the first argument of `zipWith', namely `(\ (x, y) -> x + y)'
+      In the expression: zipWith (\ (x, y) -> x + y) [1, 2] [3, 4, 5]
+  |
+6 | v3 = zipWith (\(x,y) -> x + y) [1,2] [3,4,5]          
+  |                           ^
+
+ill-typed\4.hs:6:33: error:
+    * No instance for (Num (b0 -> c0, b0 -> c0))
+        arising from the literal `1'
+    * In the expression: 1
+      In the second argument of `zipWith', namely `[1, 2]'
+      In the expression: zipWith (\ (x, y) -> x + y) [1, 2] [3, 4, 5]
+  |
+6 | v3 = zipWith (\(x,y) -> x + y) [1,2] [3,4,5]          
+  |                                 ^
+
+ill-typed\4.hs:6:39: error:
+    * Ambiguous type variable `b0' arising from the literal `3'
+      prevents the constraint `(Num b0)' from being solved.
+      Probable fix: use a type annotation to specify what `b0' should be.
+      These potential instances exist:
+        instance Num Integer -- Defined in `GHC.Num'
+        instance Num Double -- Defined in `GHC.Float'
+        instance Num Float -- Defined in `GHC.Float'
+        ...plus two others
+        ...plus one instance involving out-of-scope types
+        (use -fprint-potential-instances to see them all)
+    * In the expression: 3
+      In the third argument of `zipWith', namely `[3, 4, 5]'
+      In the expression: zipWith (\ (x, y) -> x + y) [1, 2] [3, 4, 5]
+  |
+6 | v3 = zipWith (\(x,y) -> x + y) [1,2] [3,4,5]          
+  |                                       ^

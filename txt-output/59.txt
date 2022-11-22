@@ -1,0 +1,58 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: (+) should be of type String -> String -> String
+maybeTwice = let p = map toUpper <$> token "hello"
+             in option ((+) <$> p <*> p) []
+             
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\59.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\59.hs:6:33: Not in scope: `<$>'
+
+ill-typed\59.hs:6:37: Not in scope: `token'
+
+ill-typed\59.hs:7:16: Not in scope: `option'
+
+ill-typed\59.hs:7:28: Not in scope: `<$>'
+
+ill-typed\59.hs:7:34: Not in scope: `<*>'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\59.hs, ill-typed\59.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\59.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\59.hs:6:38: error:
+    Variable not in scope: token :: String -> f [Char]
+  |
+6 | maybeTwice = let p = map toUpper <$> token "hello"
+  |                                      ^^^^^
+
+ill-typed\59.hs:7:17: error:
+    Variable not in scope: option :: f0 [Char] -> [a0] -> t
+  |
+7 |              in option ((+) <$> p <*> p) []
+  |                 ^^^^^^

@@ -1,0 +1,37 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.                
+f (c:cs) (i:is) = if i > 0 then f cs is                
+                           else f is (c:[2.2])
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\113.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\113.hs:6:26:
+    Couldn't match expected type `Bool' against inferred type `t -> t1'
+    In the expression: x
+    In the first argument of `(x + 1)', namely
+        `(if x then x + 1 else x - 2.2)'
+    In the expression: (x + 1) (if x then x + 1 else x - 2.2)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\114.hs, ill-typed\114.o )
+Linking ill-typed\114.exe ...

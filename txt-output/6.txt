@@ -1,0 +1,50 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: "a" and ["b"] should be swapped
+addList ls s = if s `elem` ls then ls else s : ls
+v5 = addList "a" ["b"]                                 
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\6.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\6.hs:7:17:
+    Couldn't match expected type `Char' against inferred type `[a]'
+    In the second argument of `addList', namely `["b"]'
+    In the expression: addList "a" ["b"]
+    In the definition of `v5': v5 = addList "a" ["b"]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\6.hs, ill-typed\6.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\6.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\6.hs:7:18: error:
+    * Couldn't match expected type `Char' with actual type `[String]'
+    * In the second argument of `addList', namely `["b"]'
+      In the expression: addList "a" ["b"]
+      In an equation for `v5': v5 = addList "a" ["b"]
+  |
+7 | v5 = addList "a" ["b"]                                 
+  |                  ^^^^^

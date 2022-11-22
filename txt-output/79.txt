@@ -1,0 +1,70 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [0] should be 0
+f x = case x of                                                     
+    0 -> [0]
+    1 -> 1
+plus :: Int -> Int -> Int
+plus = (+)
+fib x = case x of
+    0 -> f x
+    1 -> f x
+    n -> fib (n-1) `plus` fib (n-2)
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\79.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\79.hs:14:9:
+    Couldn't match expected type `Int' against inferred type `[t]'
+      Expected type: t1 -> Int
+      Inferred type: t1 -> [t]
+    In the first argument of `plus', namely `fib (n - 1)'
+    In the expression: fib (n - 1) `plus` fib (n - 2)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\79.hs, ill-typed\79.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\79.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\79.hs:11:1: error:
+    Couldn't match type `[a0]' with `Int'
+    Expected: t -> Int
+      Actual: t -> [a0]
+   |
+11 | fib x = case x of
+   | ^^^^^^^^^^^^^^^^^...
+
+ill-typed\79.hs:14:10: error:
+    * Couldn't match expected type `[a0]' with actual type `Int'
+    * In the expression: fib (n - 1) `plus` fib (n - 2)
+      In a case alternative: n -> fib (n - 1) `plus` fib (n - 2)
+      In the expression:
+        case x of
+          0 -> f x
+          1 -> f x
+          n -> fib (n - 1) `plus` fib (n - 2)
+   |
+14 |     n -> fib (n-1) `plus` fib (n-2)
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^

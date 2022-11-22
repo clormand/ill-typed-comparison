@@ -1,0 +1,58 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: the condition x should be something like isLower x 
+f x = (if x then (toUpper x) else (toLower x))                      
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\66.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\66.hs:6:26:
+    Couldn't match expected type `Char' against inferred type `Bool'
+    In the first argument of `toUpper', namely `x'
+    In the expression: (toUpper x)
+    In the expression: (if x then (toUpper x) else (toLower x))
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\66.hs, ill-typed\66.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\66.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\66.hs:6:27: error:
+    * Couldn't match expected type `Char' with actual type `Bool'
+    * In the first argument of `toUpper', namely `x'
+      In the expression: toUpper x
+      In the expression: if x then (toUpper x) else (toLower x)
+  |
+6 | f x = (if x then (toUpper x) else (toLower x))                      
+  |                           ^
+
+ill-typed\66.hs:6:44: error:
+    * Couldn't match expected type `Char' with actual type `Bool'
+    * In the first argument of `toLower', namely `x'
+      In the expression: toLower x
+      In the expression: if x then (toUpper x) else (toLower x)
+  |
+6 | f x = (if x then (toUpper x) else (toLower x))                      
+  |                                            ^

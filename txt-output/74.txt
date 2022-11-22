@@ -1,0 +1,40 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: biggest should of type Int, rather than [Int] -> Int
+normalise xs = scale biggest xs                                   
+scale x ns = map (/x) ns
+biggest (x:xs) = max x xs
+            where max x [] = x
+                  max x (y:ys) | y > x = max y ys
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\73.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\73.hs:6:19:
+    Couldn't match expected type `(t, t1)' against inferred type `[a]'
+    In the first argument of `pop', namely `(push undefined stk)'
+    In the expression: pop (push undefined stk)
+    In the definition of `idStack':
+        idStack stk = pop (push undefined stk)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\74.hs, ill-typed\74.o )
+Linking ill-typed\74.exe ...

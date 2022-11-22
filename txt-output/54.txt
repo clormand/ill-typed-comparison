@@ -1,0 +1,58 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.            
+f x y = [x , y, id , "\n"]                  
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\54.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\54.hs:6:21:
+    Couldn't match expected type `a -> a'
+           against inferred type `[Char]'
+    In the expression: "\n"
+    In the expression: [x, y, id, "\n"]
+    In the definition of `f': f x y = [x, y, id, ....]
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\54.hs, ill-typed\54.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\54.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\54.hs:6:22: error:
+    * Couldn't match type: [Char]
+                     with: a -> a
+      Expected: a -> a
+        Actual: String
+    * In the expression: "\n"
+      In the expression: [x, y, id, "\n"]
+      In an equation for `f': f x y = [x, y, id, ....]
+    * Relevant bindings include
+        y :: a -> a (bound at ill-typed\54.hs:6:5)
+        x :: a -> a (bound at ill-typed\54.hs:6:3)
+        f :: (a -> a) -> (a -> a) -> [a -> a]
+          (bound at ill-typed\54.hs:6:1)
+  |
+6 | f x y = [x , y, id , "\n"]                  
+  |                      ^^^^

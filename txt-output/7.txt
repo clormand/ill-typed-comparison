@@ -1,0 +1,65 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: (nth search) misses an argument of type Int
+nth = (!!)
+final moves idx search = 
+    if (idx == moves -1) 
+    then []
+    else (nth search) : final moves (idx+1) search ++ search
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\7.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\7.hs:10:54:
+    Occurs check: cannot construct the infinite type: a = Int -> a
+      Expected type: [Int -> a]
+      Inferred type: [a]
+    In the second argument of `(++)', namely `search'
+    In the second argument of `(:)', namely
+        `final moves (idx + 1) search ++ search'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\7.hs, ill-typed\7.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\7.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\7.hs:10:55: error:
+    * Couldn't match type `a' with `Int -> a'
+      Expected: [Int -> a]
+        Actual: [a]
+      `a' is a rigid type variable bound by
+        the inferred type of final :: t -> t -> [a] -> [Int -> a]
+        at ill-typed\7.hs:(7,1)-(10,60)
+    * In the second argument of `(++)', namely `search'
+      In the second argument of `(:)', namely
+        `final moves (idx + 1) search ++ search'
+      In the expression:
+        (nth search) : final moves (idx + 1) search ++ search
+    * Relevant bindings include
+        search :: [a] (bound at ill-typed\7.hs:7:17)
+        final :: t -> t -> [a] -> [Int -> a] (bound at ill-typed\7.hs:7:1)
+   |
+10 |     else (nth search) : final moves (idx+1) search ++ search
+   |                                                       ^^^^^^

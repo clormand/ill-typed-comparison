@@ -1,0 +1,51 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: 1 should be of type Bool
+v16 = (\x -> [1,x,True])                              
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\26.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\26.hs:6:14:
+    No instance for (Num Bool)
+      arising from the literal `1' at ill-typed\26.hs:6:14
+    Possible fix: add an instance declaration for (Num Bool)
+    In the expression: 1
+    In the expression: [1, x, True]
+    In the expression: (\ x -> [1, x, True])
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\26.hs, ill-typed\26.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\26.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\26.hs:6:15: error:
+    * No instance for (Num Bool) arising from the literal `1'
+    * In the expression: 1
+      In the expression: [1, x, True]
+      In the expression: \ x -> [1, x, ....]
+  |
+6 | v16 = (\x -> [1,x,True])                              
+  |               ^

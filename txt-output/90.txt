@@ -1,0 +1,42 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: 1 should be of type [Int]
+f x = case x of                                                     
+    0 -> [0]
+    1 -> 1
+fib x = case x of
+    0 -> f x
+    1 -> f x
+    n -> head (f x)
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\9.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\9.hs:10:7:
+    No instance for (Num [Char])
+      arising from a use of `+' at ill-typed\9.hs:10:7-16
+    Possible fix: add an instance declaration for (Num [Char])
+    In the expression: four + one
+    In the definition of `five': five = four + one
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\90.hs, ill-typed\90.o )
+Linking ill-typed\90.exe ...

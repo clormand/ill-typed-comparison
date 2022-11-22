@@ -1,0 +1,37 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: ++ should be +
+f4 [] = []                                              
+f4 (0 : t) = f4 t
+f4 (h : t) = h/2.0 ++ f4 t
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\105.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\105.hs:6:20:
+    Couldn't match expected type `t1 -> t' against inferred type `[t2]'
+    In the expression: t y
+    In the expression: \ f y (h : t) -> t y
+    In the definition of `v68': v68 = \ f y (h : t) -> t y
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\108.hs, ill-typed\108.o )
+Linking ill-typed\108.exe ...

@@ -1,0 +1,58 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: the variable t has type [a] should be of type a
+m f (h:t) = f h : [f t]                                   
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\100.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\100.hs:6:19:
+    Occurs check: cannot construct the infinite type: t = [t]
+      Expected type: [t] -> a
+      Inferred type: t -> a
+    In the expression: f t
+    In the second argument of `(:)', namely `[f t]'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\100.hs, ill-typed\100.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\100.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\100.hs:6:22: error:
+    * Couldn't match expected type `t' with actual type `[t]'
+      `t' is a rigid type variable bound by
+        the inferred type of m :: (t -> a) -> [t] -> [a]
+        at ill-typed\100.hs:6:1-23
+    * In the first argument of `f', namely `t'
+      In the expression: f t
+      In the second argument of `(:)', namely `[f t]'
+    * Relevant bindings include
+        t :: [t] (bound at ill-typed\100.hs:6:8)
+        h :: t (bound at ill-typed\100.hs:6:6)
+        f :: t -> a (bound at ill-typed\100.hs:6:3)
+        m :: (t -> a) -> [t] -> [a] (bound at ill-typed\100.hs:6:1)
+  |
+6 | m f (h:t) = f h : [f t]                                   
+  |                      ^

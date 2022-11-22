@@ -1,0 +1,62 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: x in the 2nd line should be [x]
+reverse1 [] = []                                       
+reverse1 (x:xs) = reverse1 xs ++ x
+last1 xs = head (reverse1 xs)
+init1 = reverse1 . tail . reverse1
+rotateR xs = last1 xs : init1 xs
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\11.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\11.hs:10:30:
+    Occurs check: cannot construct the infinite type: a = [a]
+      Expected type: [[[a]]]
+      Inferred type: [[a]]
+    In the first argument of `init1', namely `xs'
+    In the second argument of `(:)', namely `init1 xs'
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\11.hs, ill-typed\11.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\11.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\11.hs:10:31: error:
+    * Couldn't match type `a' with `[a]'
+      Expected: [[[a]]]
+        Actual: [[a]]
+      `a' is a rigid type variable bound by
+        the inferred type of rotateR :: [[a]] -> [a]
+        at ill-typed\11.hs:10:1-32
+    * In the first argument of `init1', namely `xs'
+      In the second argument of `(:)', namely `init1 xs'
+      In the expression: last1 xs : init1 xs
+    * Relevant bindings include
+        xs :: [[a]] (bound at ill-typed\11.hs:10:9)
+        rotateR :: [[a]] -> [a] (bound at ill-typed\11.hs:10:1)
+   |
+10 | rotateR xs = last1 xs : init1 xs
+   |                               ^^

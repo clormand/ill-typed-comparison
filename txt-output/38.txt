@@ -1,0 +1,57 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: succ should be (+)
+v21 = \n -> foldl succ 0 n                             
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\38.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\38.hs:6:18:
+    Occurs check: cannot construct the infinite type: a = b -> a
+    Probable cause: `succ' is applied to too many arguments
+    In the first argument of `foldl', namely `succ'
+    In the expression: foldl succ 0 n
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\38.hs, ill-typed\38.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\38.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\38.hs:6:19: error:
+    * Couldn't match type `b' with `a -> b'
+      Expected: b -> a -> b
+        Actual: b -> b
+      `b' is a rigid type variable bound by
+        the inferred type of v21 :: t a -> b
+        at ill-typed\38.hs:6:1-26
+    * In the first argument of `foldl', namely `succ'
+      In the expression: foldl succ 0 n
+      In the expression: \ n -> foldl succ 0 n
+    * Relevant bindings include
+        n :: t a (bound at ill-typed\38.hs:6:8)
+        v21 :: t a -> b (bound at ill-typed\38.hs:6:1)
+  |
+6 | v21 = \n -> foldl succ 0 n                             
+  |                   ^^^^

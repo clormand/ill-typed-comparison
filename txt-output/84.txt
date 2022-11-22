@@ -1,0 +1,56 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: ["error"] and "location" should be swapped
+add1 str lst                                                         
+    | str `elem` lst = lst
+    | True = str:lst
+v51 = add1 ["error"] "location"
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\84.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\84.hs:9:21:
+    Couldn't match expected type `[[Char]]'
+           against inferred type `Char'
+      Expected type: [[[Char]]]
+      Inferred type: [Char]
+    In the second argument of `add1', namely `"location"'
+    In the expression: add1 ["error"] "location"
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\84.hs, ill-typed\84.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\84.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\84.hs:9:22: error:
+    * Couldn't match type `Char' with `[String]'
+      Expected: [[String]]
+        Actual: String
+    * In the second argument of `add1', namely `"location"'
+      In the expression: add1 ["error"] "location"
+      In an equation for `v51': v51 = add1 ["error"] "location"
+  |
+9 | v51 = add1 ["error"] "location"
+  |                      ^^^^^^^^^^

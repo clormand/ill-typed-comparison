@@ -1,0 +1,63 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: there are several ways to fix the program. No oracle given.            
+makeEven x = if even x then True else x+1       
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\17.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\17.hs:6:16:
+    No instance for (Integral Bool)
+      arising from a use of `even' at ill-typed\17.hs:6:16-21
+    Possible fix: add an instance declaration for (Integral Bool)
+    In the expression: even x
+    In the expression: if even x then True else x + 1
+    In the definition of `makeEven':
+        makeEven x = if even x then True else x + 1
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\17.hs, ill-typed\17.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\17.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\17.hs:6:17: error:
+    * No instance for (Integral Bool) arising from a use of `even'
+    * In the expression: even x
+      In the expression: if even x then True else x + 1
+      In an equation for `makeEven':
+          makeEven x = if even x then True else x + 1
+  |
+6 | makeEven x = if even x then True else x+1       
+  |                 ^^^^
+
+ill-typed\17.hs:6:40: error:
+    * No instance for (Num Bool) arising from a use of `+'
+    * In the expression: x + 1
+      In the expression: if even x then True else x + 1
+      In an equation for `makeEven':
+          makeEven x = if even x then True else x + 1
+  |
+6 | makeEven x = if even x then True else x+1       
+  |                                        ^

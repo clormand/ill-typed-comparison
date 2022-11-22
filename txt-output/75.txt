@@ -1,0 +1,64 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [xs] should be xs
+merge [] ys = ys                                                    
+merge xs [] = [xs]
+merge (x:xs) (y:ys) | x < y = [x] ++ merge xs (y:ys)
+                    | otherwise = [y] ++ merge (x:xs) ys
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\75.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\75.hs:8:26:
+    Occurs check: cannot construct the infinite type: t = [t]
+      Expected type: t
+      Inferred type: [t]
+    In the second argument of `(<)', namely `y'
+    In the expression: x < y
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\75.hs, ill-typed\75.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\75.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\75.hs:8:27: error:
+    * Couldn't match expected type `a' with actual type `[a]'
+      `a' is a rigid type variable bound by
+        the inferred type of merge :: [a] -> [[a]] -> [[a]]
+        at ill-typed\75.hs:(6,1)-(9,56)
+    * In the second argument of `(<)', namely `y'
+      In the expression: x < y
+      In a stmt of a pattern guard for
+                     an equation for `merge':
+        x < y
+    * Relevant bindings include
+        ys :: [[a]] (bound at ill-typed\75.hs:8:17)
+        y :: [a] (bound at ill-typed\75.hs:8:15)
+        xs :: [a] (bound at ill-typed\75.hs:8:10)
+        x :: a (bound at ill-typed\75.hs:8:8)
+        merge :: [a] -> [[a]] -> [[a]] (bound at ill-typed\75.hs:6:1)
+  |
+8 | merge (x:xs) (y:ys) | x < y = [x] ++ merge xs (y:ys)
+  |                           ^

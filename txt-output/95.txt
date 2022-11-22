@@ -1,0 +1,53 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: True should be of type Char -> a
+map' f [] = []                                          
+map' f (x:xs) = f x ++ map' f xs
+test = map True ['a','b','c']
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\95.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\95.hs:8:11:
+    Couldn't match expected type `a -> b' against inferred type `Bool'
+    In the first argument of `map', namely `True'
+    In the expression: map True ['a', 'b', 'c']
+    In the definition of `test': test = map True ['a', 'b', 'c']
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\95.hs, ill-typed\95.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\95.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\95.hs:8:12: error:
+    * Couldn't match expected type `Char -> b' with actual type `Bool'
+    * In the first argument of `map', namely `True'
+      In the expression: map True ['a', 'b', 'c']
+      In an equation for `test': test = map True ['a', 'b', 'c']
+    * Relevant bindings include
+        test :: [b] (bound at ill-typed\95.hs:8:1)
+  |
+8 | test = map True ['a','b','c']
+  |            ^^^^

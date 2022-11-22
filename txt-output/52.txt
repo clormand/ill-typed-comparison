@@ -1,0 +1,55 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: (-1) should be ((-) 1)
+decrementList :: [Int ] -> [Int ]                 
+decrementList xs = map (-1) xs
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\52.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\52.hs:7:24:
+    No instance for (Num (Int -> Int))
+      arising from a use of syntactic negation at ill-typed\52.hs:7:24-25
+    Possible fix: add an instance declaration for (Num (Int -> Int))
+    In the first argument of `map', namely `(- 1)'
+    In the expression: map (- 1) xs
+    In the definition of `decrementList':
+        decrementList xs = map (- 1) xs
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\52.hs, ill-typed\52.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\52.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\52.hs:7:25: error:
+    * No instance for (Num (Int -> Int))
+        arising from a use of syntactic negation
+        (maybe you haven't applied a function to enough arguments?)
+    * In the first argument of `map', namely `(- 1)'
+      In the expression: map (- 1) xs
+      In an equation for `decrementList': decrementList xs = map (- 1) xs
+  |
+7 | decrementList xs = map (-1) xs
+  |                         ^^

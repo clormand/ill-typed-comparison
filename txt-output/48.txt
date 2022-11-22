@@ -1,0 +1,63 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: [1,n] and (^2) should be swapped
+squareList n = map [1, n] (^2)             
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\48.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\48.hs:6:19:
+    Couldn't match expected type `a -> b' against inferred type `[a1]'
+    In the first argument of `map', namely `[1, n]'
+    In the expression: map [1, n] (^ 2)
+    In the definition of `squareList': squareList n = map [1, n] (^ 2)
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\48.hs, ill-typed\48.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\48.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\48.hs:6:20: error:
+    * Couldn't match expected type: a0 -> b
+                  with actual type: [a]
+    * In the first argument of `map', namely `[1, n]'
+      In the expression: map [1, n] (^ 2)
+      In an equation for `squareList': squareList n = map [1, n] (^ 2)
+    * Relevant bindings include
+        n :: a (bound at ill-typed\48.hs:6:12)
+        squareList :: a -> [b] (bound at ill-typed\48.hs:6:1)
+  |
+6 | squareList n = map [1, n] (^2)             
+  |                    ^^^^^^
+
+ill-typed\48.hs:6:28: error:
+    * Couldn't match expected type: [a0]
+                  with actual type: a1 -> a1
+    * In the second argument of `map', namely `(^ 2)'
+      In the expression: map [1, n] (^ 2)
+      In an equation for `squareList': squareList n = map [1, n] (^ 2)
+  |
+6 | squareList n = map [1, n] (^2)             
+  |                            ^^

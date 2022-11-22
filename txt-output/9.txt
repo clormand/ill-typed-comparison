@@ -1,0 +1,77 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: "1" should be 1
+one = "1"
+two = one + one
+three = two + one
+four = three + one
+five = four + one
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\9.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\9.hs:10:7:
+    No instance for (Num [Char])
+      arising from a use of `+' at ill-typed\9.hs:10:7-16
+    Possible fix: add an instance declaration for (Num [Char])
+    In the expression: four + one
+    In the definition of `five': five = four + one
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\9.hs, ill-typed\9.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\9.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\9.hs:7:11: error:
+    * No instance for (Num String) arising from a use of `+'
+    * In the expression: one + one
+      In an equation for `two': two = one + one
+  |
+7 | two = one + one
+  |           ^
+
+ill-typed\9.hs:8:13: error:
+    * No instance for (Num String) arising from a use of `+'
+    * In the expression: two + one
+      In an equation for `three': three = two + one
+  |
+8 | three = two + one
+  |             ^
+
+ill-typed\9.hs:9:14: error:
+    * No instance for (Num String) arising from a use of `+'
+    * In the expression: three + one
+      In an equation for `four': four = three + one
+  |
+9 | four = three + one
+  |              ^
+
+ill-typed\9.hs:10:13: error:
+    * No instance for (Num String) arising from a use of `+'
+    * In the expression: four + one
+      In an equation for `five': five = four + one
+   |
+10 | five = four + one
+   |             ^

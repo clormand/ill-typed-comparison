@@ -1,0 +1,50 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: not i == 0  should be not ( i == 0 )
+isZero :: Int -> Bool                             
+isZero i = not i == 0
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\49.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\49.hs:7:15:
+    Couldn't match expected type `Bool' against inferred type `Int'
+    In the first argument of `not', namely `i'
+    In the first argument of `(==)', namely `not i'
+    In the expression: not i == 0
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\49.hs, ill-typed\49.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\49.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\49.hs:7:16: error:
+    * Couldn't match expected type `Bool' with actual type `Int'
+    * In the first argument of `not', namely `i'
+      In the first argument of `(==)', namely `not i'
+      In the expression: not i == 0
+  |
+7 | isZero i = not i == 0
+  |                ^

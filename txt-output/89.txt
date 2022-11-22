@@ -1,0 +1,70 @@
+RAW FILE BEING COMPILED: 
+---------------------------------------
+
+module Main where
+
+import Data.Char
+
+-- Problem: first not should be of type Int -> Int, second not should
+ff x = if True then not x else x + 1                                 
+gg x = if True then not x else 2
+v55 = ff 3 + gg True
+
+main :: IO ()
+main = putStrLn "hello world"
+
+OUTPUT FROM GHC v 6.10.4: 
+---------------------------------------
+
+﻿C:\ghc\ghc-6.10.4\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-6.10.4\bin\ghc.exe ill-typed\89.hs *> aLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\89.hs:8:9:
+    No instance for (Num Bool)
+      arising from the literal `3' at ill-typed\89.hs:8:9
+    Possible fix: add an instance declaration for (Num Bool)
+    In the first argument of `ff', namely `3'
+    In the first argument of `(+)', namely `ff 3'
+    In the expression: ff 3 + gg True
+
+
+OUTPUT FROM GHC v 9.2.5: 
+---------------------------------------
+
+﻿[1 of 1] Compiling Main             ( ill-typed\89.hs, ill-typed\89.o )
+C:\ghc\ghc-9.2.5\bin\ghc.exe : 
+At line:1 char:1
++ C:\ghc\ghc-9.2.5\bin\ghc.exe ill-typed\89.hs *> bLog.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ill-typed\89.hs:6:34: error:
+    * No instance for (Num Bool) arising from a use of `+'
+    * In the expression: x + 1
+      In the expression: if True then not x else x + 1
+      In an equation for `ff': ff x = if True then not x else x + 1
+  |
+6 | ff x = if True then not x else x + 1                                 
+  |                                  ^
+
+ill-typed\89.hs:7:32: error:
+    * No instance for (Num Bool) arising from the literal `2'
+    * In the expression: 2
+      In the expression: if True then not x else 2
+      In an equation for `gg': gg x = if True then not x else 2
+  |
+7 | gg x = if True then not x else 2
+  |                                ^
+
+ill-typed\89.hs:8:12: error:
+    * No instance for (Num Bool) arising from a use of `+'
+    * In the expression: ff 3 + gg True
+      In an equation for `v55': v55 = ff 3 + gg True
+  |
+8 | v55 = ff 3 + gg True
+  |            ^
